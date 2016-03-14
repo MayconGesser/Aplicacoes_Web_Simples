@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html lang="pt-BR">
+<title>Página de Cadastro de Login</title>
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" type="text/css" href="estilogeral.css"/>
+</head>
+<body>
+<div id="geral">
+	<h1>Bem-vindo à Página de Cadastro.</h1></br>
+	<h2>Usaremos essas informações para criar sua conta no sistema. </h2></br>
+	<h3>Um pouco sobre você:</h3>
+	<div id="infoUsuario">
+		<form action="script_cadastro.php" method="post" id="formUsuario">
+			<table id="linha_1">
+				<td><label for="ctNomeUsuario">Nome*: </label>			
+					<input type="text" maxlength="15" name="nomeUsuario" id="ctNomeUsuario" required/></td>
+				<td><label for="ctSbNomeUsuario">Sobrenome*: </label>			
+					<input type="text" maxlength="20" name="sobrenomeUsuario" id="ctSbNomeUsuario" required/></td>	
+			</table>			
+			</br>		
+			<table id="linha_2">
+				<td><label for="ctCidUsuario">Cidade:</label>			
+					<input type="text" maxlength="25" name="cidadeUsuario" id="ctCidUsuario"/></td>
+				<td><label for="ctEndUsuario">Endereço:</label>			
+					<input type="text" name="enderecoUsuario" id="ctEndUsuario"/></td>
+			</table>
+			</br>
+			<table id="linha_3">
+				<td><label for="ctTelUsuario">Telefone para contato:</label>
+					<input type="text" maxlength="20" name="telefoneUsuario" id="ctTelUsuario" onkeypress="avaliar(this, event);"/></td>
+				<td><label for="ctEmailUsuario">Email*:</label>
+					<input type="text" maxlength="40" name="emailUsuario" id="ctEmailUsuario" required/></td>
+			</table>	
+			</br>	
+			<h3>Informações da Conta:</h3>			
+				<label for="ctLogin">Login*:</label>
+				<input type="text" maxlength="30" name="login" id="ctLogin" required/></br></br>
+				<label for="ctSenha">Senha*:</label>
+				<input type="password" maxlength="30" name="senha" id="ctSenha" required/></br></br>
+				<label for="ctConfirmarSenha">Confirmar Senha*:</label>
+				<input type="password" maxlength="30" id="ctConfirmarSenha" required/></br></br>
+			</br>			
+		</form>
+	</div>
+	
+	</br>
+	
+	<p id="leg">*: Os campos marcados são de preenchimento obrigatório.</p>
+	
+	</br>
+	
+	<table id="linha_botoes">
+		<td><button type="button" id="btCadastrar">Cadastrar Dados</button></td>
+		<td style="padding:30px"></td>
+		<td><button type="button" id="btCancelar">Cancelar</button></td>
+	</table>		
+</div>
+<p id="resultado" hidden>dummy</p>
+<script>
+	//achei melhor definir explicitamente os callbacks ao inves de passar funcoes anonimas
+		document.getElementById('btCadastrar').addEventListener("click", rotinaDeVerificacao);		
+		document.getElementById('btCancelar').addEventListener("click", apagarFormulario);
+		
+		var campoTel = document.getElementById('ctTelUsuario');
+		
+		campoTel.addEventListener("keypress", function(e){
+			avaliar(campoTel, e);
+		});
+		
+		var elementos = document.getElementById('formUsuario').elements;		//elementos do formulario, var global pq ambas as funcoes acessam
+	
+	//pega valores dos campos
+		function rotinaDeVerificacao(){
+			
+						
+			var flag = false;		//usei uma variavel boolean para checar excecoes apenas depois de o for parar de rodar, para nao disparar
+									//mensagens seguidas. Poderia tb ter dado break no for se a condicao em q flag = true se realiza, mas assim
+									//eh um pouco mais elegante
+			
+			for(var i = 0; i<elementos.length; i++){
+				if(elementos[i].hasAttribute('required') && elementos[i].value === ""){
+					console.log(elementos[i]);
+					flag = true;
+				}
+			}
+			
+			if(flag){
+				alert('Por favor, preencha todos os campos de preenchimento obrigatório.');
+				return false;
+			}
+			
+			//verifica a igualdade dos campos senha e validade do email 
+			else{
+					var valorCampoSenha = document.getElementById('ctSenha').value;
+					var valorCampoConfirmarSenha = document.getElementById('ctConfirmarSenha').value;
+					var valorCampoEmail = document.getElementById('ctEmailUsuario').value;
+					
+					if(valorCampoSenha != valorCampoConfirmarSenha){
+						alert('Os valores dos campos Senha e Confirmar Senha não são iguais. Por favor, certifique-se que ambos são iguais.');
+						return false;					
+					}				
+					
+					if(!verificaEmail(valorCampoEmail)){
+						alert('Por favor, forneça um endereço de email válido.');
+						return false;
+					}
+				}				
+				
+				document.getElementById('formUsuario').submit();
+				return true;
+			
+			}							
+	
+		function apagarFormulario(){
+		
+			var confirma = confirm('Tem certeza que deseja cancelar o preenchimento (O formulário será apagado) ?');
+			if(confirma){
+				for(var i = 0; i<elementos.length; i++){
+					elementos[i].value = "";
+				}
+				return true;
+			}
+			
+			else{
+				return false;
+			}
+		}
+		
+		//funcao q faz o campo Telefone aceitar apenas valores numericos
+		function avaliar(el, evt){
+
+			  var val = evt.keyCode;
+			
+			//determina se eh uma tecla numerica sendo pressionada
+			  if(val > 57 || val < 49){	
+					
+					evt.preventDefault(); 
+			 
+			}	
+		}		
+		
+		//funcao de verificacao de validade de email usando expressoes regulares
+		function verificaEmail(email){
+		
+			var regra = /[A-Za-z0-9._-]+@[A-Za-z0-9._-]+\.[A-Za-z]{2,4}/;
+  
+			var expressaoRegular = new RegExp(regra);
+			  
+			return expressaoRegular.test(email);
+		}
+</script>
+</body>
+</html>
