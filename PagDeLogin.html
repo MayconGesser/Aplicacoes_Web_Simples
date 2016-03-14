@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html lang="pt-BR">
+<head>
+<title>Página de Login</title>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" type="text/css" href="estilogeral.css"/>
+<script>
+var CampoLogin;
+var CampoSenha;
+
+//carrega referencias aos campos logo na abertura da janela para contornar o problema
+//de parsing do DOM
+window.onload = function(){
+	CampoLogin = document.getElementById("ctlogin");
+	CampoSenha = document.getElementById("ctSenha");
+	console.log(CampoLogin);
+	console.log(CampoSenha);
+}
+</script>
+</head>
+<body>
+<h1>Bem-vindo à página de Login.</h1></br>
+<h2>Entre com seu Login e Senha para acessar sua conta: </h2>
+<form action="script_login.php" method="get" id="formularioLogin">
+	<fieldset>			
+			<label for="input">Login: </label>
+			<div class="input">
+				<input type="text" name="login" value="" id="ctlogin"></input>
+			</div>
+		</div>
+		</br>
+		<div class="linha">
+			<label for="input">Senha:</label>
+			<div class="input">
+				<input type="password" name="senha" value="" id="ctSenha"></input>
+			</div>
+		</div>	
+		</br>
+		<div class="botao">
+			<button type="button" id="botaoEnviar">Enviar</button>
+		</div>		
+	</fieldset>	
+</form>
+<script>
+
+	document.getElementById('botaoEnviar').addEventListener("click",function(){
+		
+		
+		var conteudoCampoLogin = CampoLogin.value;
+		var conteudoCampoSenha = CampoSenha.value;
+		
+		
+		if(conteudoCampoLogin === "" || conteudoCampoSenha === ""){
+			alert('Os campos de Login e Senha precisam estar preenchidos');
+			return false;
+		}
+		
+		document.getElementById('formularioLogin').submit();
+		
+	});
+</script>
+</body>
+</html>
